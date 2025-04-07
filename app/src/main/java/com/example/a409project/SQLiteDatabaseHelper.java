@@ -17,7 +17,6 @@ public class SQLiteDatabaseHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 2;
 
     private static final String TABLE_TRANSACTIONS = "transactions";
-    private static final String COLUMN_TYPE = "type";
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_AMOUNT = "amount";
     private static final String COLUMN_DESCRIPTION = "description";
@@ -26,7 +25,6 @@ public class SQLiteDatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_TRANSACTIONS =
             "CREATE TABLE " + TABLE_TRANSACTIONS + " (" +
                     COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    COLUMN_TYPE + "INTEGER ," +
                     COLUMN_AMOUNT + " REAL, " +
                     COLUMN_DESCRIPTION + " TEXT, " +
                     COLUMN_DATE + " TEXT);";
@@ -67,7 +65,6 @@ public class SQLiteDatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(COLUMN_TYPE, transaction.getType() ? 1 : 0);
 
         values.put(COLUMN_AMOUNT, transaction.getAmount());
         values.put(COLUMN_DESCRIPTION, transaction.getDescription());
@@ -83,7 +80,6 @@ public class SQLiteDatabaseHelper extends SQLiteOpenHelper {
     public void updateTransaction(Transaction transaction) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(COLUMN_TYPE, transaction.getType() ? 1 : 0);
         values.put(COLUMN_AMOUNT, transaction.getAmount());
         values.put(COLUMN_DESCRIPTION, transaction.getDescription());
         values.put(COLUMN_DATE, transaction.getDate());
@@ -101,11 +97,10 @@ public class SQLiteDatabaseHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 int id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID));
-                boolean type = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_TYPE)) == 1;
                 double amount = cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_AMOUNT));
                 String description = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DESCRIPTION));
                 String date = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DATE));
-                Transaction transaction = new Transaction(context, type, id, amount, description, date);
+                Transaction transaction = new Transaction(context,id, amount, description, date, false);
                 transactionList.add(transaction);
             } while (cursor.moveToNext());
         }

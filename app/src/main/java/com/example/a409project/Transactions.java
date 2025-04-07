@@ -1,6 +1,10 @@
 package com.example.a409project;
 
 import android.content.Context;
+import android.util.Log;
+import android.widget.TextView;
+
+import java.util.List;
 
 class Transaction {
     private int id;
@@ -10,28 +14,30 @@ class Transaction {
     private String date;
     private SQLiteDatabaseHelper dbHelper;
 
-    public Transaction(Context context, boolean type, double amount, String description, String date) {
+    public Transaction(Context context, double amount, String description, String date, boolean toInsert) {
         this.amount = amount;
-        this.type = type;
         this.description = description;
         this.date = date;
         this.dbHelper = new SQLiteDatabaseHelper(context);
-        dbHelper.insertTransaction(this);
+        if(toInsert){
+            dbHelper.insertTransaction(this);
+        }
     }
 
-    public Transaction(Context context, boolean type, int id, double amount, String description, String date) {
+    public Transaction(Context context, int id, double amount, String description, String date, boolean toInsert) {
         this.id = id;
         this.amount = amount;
-        this.type = type;
         this.description = description;
         this.date = date;
         this.dbHelper = new SQLiteDatabaseHelper(context);
-        dbHelper.insertTransaction(this);
+        if(toInsert){
+            dbHelper.insertTransaction(this);
+        }
+
     }
 
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
-    public boolean getType() {return type;}
     public double getAmount() { return amount; }
     public String getDescription() { return description; }
     public String getDate() { return date; }
@@ -51,8 +57,7 @@ class Transaction {
         dbHelper.updateTransaction(this);
     }
 
-    public void setType(boolean type) {
-        this.type = type;
-        dbHelper.updateTransaction(this);
-    }
+
+
+
 }

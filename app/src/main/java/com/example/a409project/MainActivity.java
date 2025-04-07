@@ -1,7 +1,11 @@
 package com.example.a409project;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -14,7 +18,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    SQLiteDatabaseHelper dbHelper;
+    Tools tools;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,33 +30,37 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        dbHelper = new SQLiteDatabaseHelper(this);
 
+        tools = new Tools();
 
-        Transaction transaction = new Transaction(this, true, 100.0, "Achat", "2025-04-02");
+        tools.InitateDB(this);
+
+        Button add_transa = findViewById(R.id.add_transa);
+        EditText editText = findViewById(R.id.value);
+
+        add_transa.setOnClickListener(v ->
+                addTransa(this, Double.parseDouble(editText.getText().toString()), "Test", "2025-01-01"));
+
+        
 
         UpdateAmount();
-
-
     }
 
-    protected double CountAmount(){
-        double amount = 0;
-        List<Transaction> transactions = dbHelper.getAllTransactions(this);
-        for (Transaction t : transactions) {
-            Log.d("Transaction", "ID: " + t.getId() + ", Montant: " + t.getAmount());
-            if (t.getType() == false) {
-                amount -= t.getAmount();
+    protected void addTransa(Context context, double amount, String description, String date){
+        tools.AddTransaction(context, amount, description, date);
+        UpdateAmount();
+    }
 
-            } else {
-                amount += t.getAmount();
-            }
-        }
-        return amount;
+
+    public void UpdateAmount(){
+        double amount = tools.CountAmount(this);
+        TextView montant = findViewById(R.id.montant);
+        montant.setText(amount+"");
     }
-    protected void UpdateAmount(){
-        TextView text = findViewById(R.id.montant);
-        text.setText(CountAmount()+"");
-    }
+
+
+
+
+
 }
 
