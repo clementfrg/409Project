@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">409Project</string>
     <string name="main_dashboard">Main Dashboard</string>
-    <string name="NavBar2">Tableau</string>
-    <string name="NavBar3">Paramètres</string>
-    <string name="NavBar1">Accueil</string>
+    <string name="NavBar2">Balance</string>
+    <string name="NavBar3">Settings</string>
+    <string name="NavBar1">Home</string>
+    <string name="call_us">Call Us</string>
 </resources>

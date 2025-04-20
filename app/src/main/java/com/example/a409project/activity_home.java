@@ -11,18 +11,30 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class MainActivity extends AppCompatActivity {
-    TextView navSettings, navHome;
+public class activity_home extends AppCompatActivity {
+
+    TextView navDashboard, navSettings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.dashboard), (v, insets) -> {
+        setContentView(R.layout.activity_home);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.home), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+        });
+
+        //NavBar handling switch between activity.
+        navDashboard = findViewById(R.id.nav_dashboard);
+
+        navDashboard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(activity_home.this, MainActivity.class);
+                startActivity(intent);
+            }
         });
 
         navSettings = findViewById(R.id.nav_settings);
@@ -30,17 +42,7 @@ public class MainActivity extends AppCompatActivity {
         navSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, settings_activity.class);
-                startActivity(intent);
-            }
-        });
-
-        navHome = findViewById(R.id.nav_home);
-
-        navHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, activity_home.class);
+                Intent intent = new Intent(activity_home.this, settings_activity.class);
                 startActivity(intent);
             }
         });
