@@ -1,6 +1,7 @@
 package com.example.a409project;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -30,13 +31,27 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
+        // Inialize evrything
         tools = new Tools();
-
         tools.InitateDB(this);
 
+
+        //Button to add a transaction
         Button add_transa = findViewById(R.id.add_transa);
         EditText editText = findViewById(R.id.value);
+
+
+        Button change_activity = findViewById(R.id.change_activity);
+        EditText transaction_id = findViewById(R.id.Transa_a_modifier);
+        change_activity.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, Transactions_activity.class);
+            if (!transaction_id.getText().toString().isEmpty()) {
+                intent.putExtra("Transaction_id", Integer.parseInt(transaction_id.getText().toString()));
+            }
+
+
+            startActivity(intent);
+        });
 
         add_transa.setOnClickListener(v ->
                 addTransa(this, Double.parseDouble(editText.getText().toString()), "Test", "2025-01-01"));
@@ -45,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
 
         UpdateAmount();
     }
+
+
 
     protected void addTransa(Context context, double amount, String description, String date){
         tools.AddTransaction(context, amount, description, date);

@@ -14,6 +14,15 @@
         android:textSize="20dp" />
 
     <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/Transa_a_modifier"
+        android:layout_below="@id/change_activity"
+        android:hint="Quelle transaction modifier"
+        android:inputType="number"
+        />
+
+    <EditText
         android:layout_width="209dp"
         android:layout_height="43dp"
         android:layout_alignTop="@id/montant"
@@ -30,5 +39,14 @@
         android:layout_alignParentEnd="true"
         android:text="Ajouter une Transaction"
         android:id="@+id/add_transa"
+        />
+
+    <Button
+        android:id="@+id/change_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Change activity"
+
+
         />
 </RelativeLayout>

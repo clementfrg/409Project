@@ -47,4 +47,19 @@ public class Tools {
         }
         return amount;
     }
+
+    public void UpdateTransaction(Context context, Transaction transaction){
+        try {
+            dbHelper.updateTransaction(transaction);
+        } catch (Exception e) {
+            Log.println(Log.ERROR, "Transactions", "Erreur lors de l'ajout de la transaction" + e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<Transaction> GetTransactionList(Context context){
+        list_transa = dbHelper.getAllTransactions(context);
+        return list_transa;
+
+    }
 }
