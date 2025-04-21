@@ -4,10 +4,12 @@
     android:id="@+id/dashboard"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    >
+
     <!-- Balance background -->
     <View
         android:id="@+id/BlueCardBox"
+
         android:layout_width="wrap_content"
         android:layout_height="250dp"
         android:background="@drawable/rounded_bottom_corner"
@@ -49,6 +51,7 @@
         android:layout_marginBottom="100dp"
         android:layout_marginEnd="20dp"
         />
+
     <!-- Navigation Bar -->
     <TableLayout
         android:id="@+id/NavBar"
@@ -108,3 +111,4 @@
     </TableLayout>
 
 </RelativeLayout>
+
