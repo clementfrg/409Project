@@ -4,41 +4,8 @@
     android:id="@+id/dashboard"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/main"
     >
 
-    <TextView
-        android:id="@+id/montant"
-        android:layout_width="387dp"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="OIJIOSqklsdnlqksndlkqsndlkqsndlqndJD"
-        android:textSize="20dp" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/Transa_a_modifier"
-        android:layout_below="@id/change_activity"
-        android:hint="Quelle transaction modifier"
-        android:inputType="number"
-        />
-
-    <EditText
-        android:layout_width="209dp"
-        android:layout_height="43dp"
-        android:layout_alignTop="@id/montant"
-        android:layout_marginTop="30dp"
-        android:layout_marginRight="-184dp"
-        android:layout_toLeftOf="@id/montant"
-        android:id="@+id/value"
-        android:hint="entrer le montant" />
-
-    <Button
-
-    android:background="@color/white">
     <!-- Balance background -->
     <View
         android:id="@+id/BlueCardBox"

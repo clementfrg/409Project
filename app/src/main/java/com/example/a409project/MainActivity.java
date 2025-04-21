@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -14,7 +17,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
-    TextView navSettings, navHome;
+    TextView navSettings, navHome, Balance;
+    Tools tools;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,38 +36,22 @@ public class MainActivity extends AppCompatActivity {
         tools.InitateDB(this);
 
 
-        //Button to add a transaction
-        Button add_transa = findViewById(R.id.add_transa);
-        EditText editText = findViewById(R.id.value);
 
+        Balance = findViewById(R.id.Balance);
 
-        Button change_activity = findViewById(R.id.add_transa);
-        EditText transaction_id = findViewById(R.id.Transa_a_modifier);
+        ImageButton change_activity = findViewById(R.id.add_transa);
+        EditText transaction_id = null;
         change_activity.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, Transactions_activity.class);
-            if (!transaction_id.getText().toString().isEmpty()) {
+            startActivityForResult(intent, 1);
+            //TODDO : MUST BE CHANGE
+            if (false) {
                 intent.putExtra("Transaction_id", Integer.parseInt(transaction_id.getText().toString()));
             }
 
 
-            startActivity(intent);
+            //startActivity(intent);
         });
-
-        add_transa.setOnClickListener(v ->
-                addTransa(this, Double.parseDouble(editText.getText().toString()), "Test", "2025-01-01"));
-
-        
-
-        UpdateAmount();
-    }
-
-
-
-    protected void addTransa(Context context, double amount, String description, String date){
-        tools.AddTransaction(context, amount, description, date);
-        UpdateAmount();
-    }
-
 
         navSettings = findViewById(R.id.nav_settings);
 
@@ -84,5 +72,31 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
+        UpdateAmount();
+    }
+
+
+
+    protected void addTransa(Context context, double amount, String description, String date){
+        tools.AddTransaction(context, amount, description, date);
+        UpdateAmount();
+    }
+
+
+
+
+    public void UpdateAmount(){
+        double amount = tools.CountAmount(this);
+        Balance.setText(amount+"");
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            UpdateAmount(); // Met à jour le montant
+        }
     }
 }

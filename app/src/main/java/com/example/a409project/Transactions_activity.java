@@ -76,7 +76,7 @@ public class Transactions_activity extends AppCompatActivity {
         //Button
         Button back_t1o_main = findViewById(R.id.main_activity);
         back_t1o_main.setOnClickListener(v -> {
-            finish(); // Termine l'activité actuelle et revient à MainActivity
+            backToMain(); // Termine l'activité actuelle et revient à MainActivity
         });
 
         Button submit = findViewById(R.id.Submit);
@@ -157,6 +157,11 @@ public class Transactions_activity extends AppCompatActivity {
         }
 
 
+        backToMain();
+    }
+
+    protected void backToMain(){
+        setResult(RESULT_OK);
         finish();
     }
 }
