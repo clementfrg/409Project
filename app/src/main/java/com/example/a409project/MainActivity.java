@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         tools = new Tools();
         tools.InitateDB(this);
 
-
+        //Set the title
         Balance = findViewById(R.id.Balance);
 
         ImageButton change_activity = findViewById(R.id.add_transa);
