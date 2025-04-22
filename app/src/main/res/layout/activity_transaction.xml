@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,53 +7,98 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/white"
     tools:context=".Transaction">
+
+    <TextView
+        android:id="@+id/main_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:textColor="@android:color/black"
+        android:drawableStart="@drawable/baseline_arrow_back_40"
+        android:focusable="true"
+
+
+        android:textSize="8sp" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Gestion de la transaction"
+        android:text="Transaction"
+        android:id="@+id/title"
         android:gravity="center"
+
+        android:textColor="@android:color/black"
+        android:layout_toRightOf="@id/main_activity"
         android:textSize="30dp"
         />
 
     <RadioGroup
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
+        android:layout_below="@id/title"
+        android:textColor="@android:color/black"
         android:id="@+id/radio_group">
 
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Entree d'argent"
+            android:text="Income"
             android:id="@+id/income"
+            android:textColor="@android:color/black"
             />
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sortie d'argent"
+            android:text="Outcome"
             android:id="@+id/outcome"
+            android:textColor="@android:color/black"
             />
 
     </RadioGroup>
 
 
     <EditText
-        android:layout_width="match_parent"
+        android:layout_width="360dp"
         android:layout_height="50dp"
-        android:hint="Montant"
+        android:hint="Amount"
         android:id="@+id/montant"
-        android:inputType="number"
+        android:layout_marginTop="20sp"
+        android:inputType="numberDecimal"
+        android:textColor="@android:color/black"
+
+        android:layout_below="@id/radio_group"
         />
+
+
+    <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="50dp"
+    android:hint="Montant"
+    android:id="@+id/eur"
+        android:layout_marginTop="20sp"
+    android:gravity="center"
+    android:layout_alignParentEnd="true"
+    android:text="€"
+    android:textSize="30dp"
+    android:layout_toEndOf="@id/montant"
+    android:layout_below="@id/radio_group"
+        android:textColor="@android:color/black"
+    />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:layout_marginTop="20sp"
         android:hint="Description"
+        android:layout_below="@id/montant"
+        android:inputType="text"
         android:id="@+id/Desc"
+        android:textColor="@android:color/black"
         />
 
     <EditText
@@ -61,24 +106,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:layout_below="@id/Desc"
         android:hint="date"
+        android:layout_marginTop="20sp"
         android:focusable="false"
         android:clickable="true"
-        android:inputType="date" />
+        android:inputType="date"
+        android:textColor="@android:color/black"
+        />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Submit"
-        android:id="@+id/Submit"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Back to main activity"
-        android:id="@+id/main_activity"
-        />
+        android:backgroundTint="@color/cyan"
+        android:layout_marginTop="20sp"
+        android:layout_below="@id/date"
+        android:id="@+id/Submit"
+        android:textColor="@android:color/black"/>
 
 
 
-</LinearLayout>
+
+</RelativeLayout>
