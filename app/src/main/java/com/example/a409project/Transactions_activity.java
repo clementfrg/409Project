@@ -7,6 +7,8 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -74,7 +76,7 @@ public class Transactions_activity extends AppCompatActivity {
         }
 
         //Button
-        Button back_t1o_main = findViewById(R.id.main_activity);
+        TextView back_t1o_main = findViewById(R.id.main_activity);
         back_t1o_main.setOnClickListener(v -> {
             backToMain(); // Termine l'activité actuelle et revient à MainActivity
         });
@@ -161,6 +163,7 @@ public class Transactions_activity extends AppCompatActivity {
     }
 
     protected void backToMain(){
+        Toast.makeText(this, "Transaction saved successfully!", Toast.LENGTH_SHORT).show();
         setResult(RESULT_OK);
         finish();
     }
