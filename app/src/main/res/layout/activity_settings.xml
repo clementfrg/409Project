@@ -7,11 +7,50 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
+    <!-- Call button -->
     <Button
         android:id="@+id/btn_call"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/call_us"/>
+        android:text="@string/call_us"
+        android:backgroundTint="@color/cyan"
+        android:layout_marginTop="50dp"/>
+
+    <!-- Website button -->
+    <Button
+        android:id="@+id/btn_website"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/Website"
+        android:layout_below="@id/btn_call"
+        android:backgroundTint="@color/cyan"
+        android:layout_marginVertical="20dp"/>
+
+    <!-- Little Prank -->
+    <Button
+        android:id="@+id/btn_prank"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btnPrank"
+        android:layout_below="@id/btn_website"
+        android:backgroundTint="@color/cyan"
+/>
+    <VideoView
+        android:id="@+id/videoView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <!-- Application version -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/NavBar"
+        android:text="@string/AppVersion"
+        android:textSize="20sp"
+        android:textAlignment="center"
+        android:padding="10dp"
+        />
 
     <!-- Navigation Bar -->
     <TableLayout

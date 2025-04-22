@@ -5,4 +5,7 @@
     <string name="NavBar3">Settings</string>
     <string name="NavBar1">Home</string>
     <string name="call_us">Call Us</string>
+    <string name="Website">Our Website</string>
+    <string name="AppVersion">Current App Version: 1.0.0</string>
+    <string name="btnPrank">Get Free Money !</string>
 </resources>
