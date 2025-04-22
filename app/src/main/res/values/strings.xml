@@ -8,4 +8,6 @@
     <string name="Website">Our Website</string>
     <string name="AppVersion">Current App Version: 1.0.0</string>
     <string name="btnPrank">Get Free Money !</string>
+    <string name="app_icon">AppIcon</string>
+    <string name="AppName">Netly</string>
 </resources>
