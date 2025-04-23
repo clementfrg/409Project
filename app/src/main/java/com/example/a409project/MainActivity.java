@@ -93,6 +93,8 @@ public class MainActivity extends AppCompatActivity {
                 TableLayout.LayoutParams.MATCH_PARENT,
                 TableLayout.LayoutParams.WRAP_CONTENT
         ));
+        tableLayout.setStretchAllColumns(true);
+
 
         scrollView.addView(tableLayout);
 
