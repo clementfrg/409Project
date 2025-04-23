@@ -1,28 +1,62 @@
-# .github/workflows/android_ci.yml
-name: Android CI
+name: Android CI/CD
 
 on:
   push:
     branches: [main, develop]
   pull_request:
     branches: [develop]
-  workflow_dispatch:
   release:
     types: [published]
 
 jobs:
-  build:
+  check-and-build:
+    name: "✅ Lint & Build APK (unsigned)"
     runs-on: ubuntu-latest
+    outputs:
+      unsigned_apk: ${{ steps.upload.outputs.artifact-id }}
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '17'
+
+      - name: Run lint & unit tests
+        run: ./gradlew lint test
+
+      - name: Build unsigned APK
+        run: ./gradlew assembleRelease
+
+      - name: Upload unsigned APK
+        id: upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: unsigned-apk
+          path: app/build/outputs/apk/release/app-release-unsigned.apk
+
+  sign-and-release:
+    name: "🚀 Sign & Release APK"
+    needs: check-and-build
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Download unsigned APK
+        uses: actions/download-artifact@v3
+        with:
+          name: unsigned-apk
+          path: .
 
       - name: Decode keystore
         run: |
@@ -34,12 +68,20 @@ jobs:
           RELEASE_KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}
           EOF
 
-      - name: Build signed APK
-        run: ./gradlew assembleRelease
+      - name: Sign APK
+        run: |
+          jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 \
+            -keystore keystore.jks \
+            -storepass "${{ secrets.KEYSTORE_PASSWORD }}" \
+            -keypass "${{ secrets.KEY_PASSWORD }}" \
+            app-release-unsigned.apk "${{ secrets.KEY_ALIAS }}"
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
+          zipalign -v 4 app-release-unsigned.apk app-release-signed.apk
+
+      - name: Upload to GitHub Release
+        uses: softprops/action-gh-release@v1
         with:
-          name: app-release
-          path: app/build/outputs/apk/release/app-release.apk
+          files: app-release-signed.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
