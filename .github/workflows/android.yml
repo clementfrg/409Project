@@ -10,11 +10,8 @@ on:
 
 jobs:
   check-and-build:
-    name: "Lint & Build APK (unsigned)"
+    name: "Lint & Build APK unsigned"
     runs-on: ubuntu-latest
-    outputs:
-      unsigned_apk: ${{ steps.upload.outputs.artifact-id }}
-
     steps:
       - uses: actions/checkout@v3
 
@@ -24,23 +21,16 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Configure gradle.properties
+      - name: Set Gradle properties
         run: |
           echo "android.useAndroidX=true" >> gradle.properties
           echo "android.enableJetifier=true" >> gradle.properties
 
-      - name: Run lint & unit tests
+      - name: Lint & Unit Tests
         run: ./gradlew lint test
 
       - name: Build unsigned APK
-        run: ./gradlew assembleRelease
-
-      - name: Upload unsigned APK
-        id: upload
-        uses: actions/upload-artifact@v4
-        with:
-          name: unsigned-apk
-          path: app/build/outputs/apk/release/app-release-unsigned.apk
+        run: ./gradlew assembleDebug
 
   sign-and-release:
     name: "Sign & Release APK"
@@ -57,13 +47,7 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Download unsigned APK
-        uses: actions/download-artifact@v3
-        with:
-          name: unsigned-apk
-          path: .
-
-      - name: Configure gradle.properties & keystore
+      - name: Decode keystore + set Gradle properties
         run: |
           echo "android.useAndroidX=true" >> gradle.properties
           echo "android.enableJetifier=true" >> gradle.properties
@@ -73,20 +57,13 @@ jobs:
           echo "RELEASE_STORE_PASSWORD=${{ secrets.KEYSTORE_PASSWORD }}" >> gradle.properties
           echo "RELEASE_KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}" >> gradle.properties
 
-      - name: Sign APK
-        run: |
-          jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 \
-            -keystore keystore.jks \
-            -storepass "${{ secrets.KEYSTORE_PASSWORD }}" \
-            -keypass "${{ secrets.KEY_PASSWORD }}" \
-            app-release-unsigned.apk "${{ secrets.KEY_ALIAS }}"
-
-          zipalign -v 4 app-release-unsigned.apk app-release-signed.apk
+      - name: Build signed APK
+        run: ./gradlew assembleRelease
 
       - name: Upload to GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          files: app-release-signed.apk
+          files: app/build/outputs/apk/release/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
