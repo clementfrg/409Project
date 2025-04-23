@@ -1,9 +1,14 @@
-name: Build & Conditional Release
+# .github/workflows/android_ci.yml
+name: Android CI
 
 on:
   push:
-    branches:
-      - '**'
+    branches: [main, develop]
+  pull_request:
+    branches: [develop]
+  workflow_dispatch:
+  release:
+    types: [published]
 
 jobs:
   build:
@@ -11,51 +16,30 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
-      - name: Set up JDK
-        uses: actions/setup-java@v4
+      - name: Setup Java
+        uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Build APK
+      - name: Decode keystore
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > keystore.jks
+          cat >> gradle.properties <<EOF
+          RELEASE_STORE_FILE=keystore.jks
+          RELEASE_KEY_ALIAS=${{ secrets.KEY_ALIAS }}
+          RELEASE_STORE_PASSWORD=${{ secrets.KEYSTORE_PASSWORD }}
+          RELEASE_KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}
+          EOF
+
+      - name: Build signed APK
         run: ./gradlew assembleRelease
 
-      - name: Upload APK as artifact
-        uses: actions/upload-artifact@v4
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
         with:
-          name: app-release.apk
+          name: app-release
           path: app/build/outputs/apk/release/app-release.apk
-
-      - name: Check if commit is tagged and on main
-        id: tag_check
-        run: |
-          IS_MAIN=$([[ "$GITHUB_REF_NAME" == "main" ]] && echo true || echo false)
-          TAG=$(git tag --points-at HEAD)
-          echo "tag_name=$TAG" >> $GITHUB_OUTPUT
-          echo "on_main=$IS_MAIN" >> $GITHUB_OUTPUT
-
-      - name: Get commit logs since last tag
-        if: steps.tag_check.outputs.on_main == 'true' && steps.tag_check.outputs.tag_name != ''
-        id: changelog
-        run: |
-          PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
-          if [ -n "$PREV_TAG" ]; then
-            LOG=$(git log "$PREV_TAG"..HEAD --pretty=format:"- %s (%an)")
-          else
-            LOG=$(git log HEAD --pretty=format:"- %s (%an)")
-          fi
-          echo "changelog<<EOF" >> $GITHUB_OUTPUT
-          echo "$LOG" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-
-      - name: Create GitHub Release
-        if: steps.tag_check.outputs.on_main == 'true' && steps.tag_check.outputs.tag_name != ''
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: ${{ steps.tag_check.outputs.tag_name }}
-          name: ${{ steps.tag_check.outputs.tag_name }}
-          body: ${{ steps.changelog.outputs.changelog }}
-          files: app/build/outputs/apk/release/app-release.apk
 
