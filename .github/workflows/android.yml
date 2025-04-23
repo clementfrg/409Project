@@ -10,7 +10,7 @@ on:
 
 jobs:
   check-and-build:
-    name: "✅ Lint & Build APK (unsigned)"
+    name: "Lint & Build APK (unsigned)"
     runs-on: ubuntu-latest
     outputs:
       unsigned_apk: ${{ steps.upload.outputs.artifact-id }}
@@ -32,7 +32,7 @@ jobs:
 
       - name: Upload unsigned APK
         id: upload
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: unsigned-apk
           path: app/build/outputs/apk/release/app-release-unsigned.apk
