@@ -16,12 +16,26 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    signingConfigs {
-        create("release") {
-            storeFile = file(project.findProperty("RELEASE_STORE_FILE") as String)
-            storePassword = project.findProperty("RELEASE_STORE_PASSWORD") as String
-            keyAlias = project.findProperty("RELEASE_KEY_ALIAS") as String
-            keyPassword = project.findProperty("RELEASE_KEY_PASSWORD") as String
+    // Configuration conditionnelle de la signature
+    if (
+        project.hasProperty("RELEASE_STORE_FILE") &&
+        project.hasProperty("RELEASE_STORE_PASSWORD") &&
+        project.hasProperty("RELEASE_KEY_ALIAS") &&
+        project.hasProperty("RELEASE_KEY_PASSWORD")
+    ) {
+        signingConfigs {
+            create("release") {
+                storeFile = file(project.property("RELEASE_STORE_FILE")!!)
+                storePassword = project.property("RELEASE_STORE_PASSWORD") as String
+                keyAlias = project.property("RELEASE_KEY_ALIAS") as String
+                keyPassword = project.property("RELEASE_KEY_PASSWORD") as String
+            }
+        }
+
+        buildTypes {
+            getByName("release") {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
     }
 
@@ -32,7 +46,6 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            signingConfig = signingConfigs.getByName("release")
         }
     }
 
